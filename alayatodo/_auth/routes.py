@@ -24,7 +24,7 @@ def login_POST():
     else:
       flash('Login Unsuccessful. Please check username and password.', 'danger')
 
-    return render_template('login.html')
+    return render_template('login.html'), 401
 
 @bp.route('/logout')
 def logout():

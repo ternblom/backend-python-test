@@ -9,9 +9,10 @@ import subprocess
 import os
 
 from flask_migrate import upgrade
-from alayatodo import app
+from alayatodo import create_app
 from alayatodo.helpers import db_seed
 
+app = create_app()
 
 if __name__ == '__main__':
     args = docopt(__doc__)

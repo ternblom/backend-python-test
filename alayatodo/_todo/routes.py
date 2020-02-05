@@ -11,7 +11,7 @@ def todo(id):
     todo = Todo.query.filter_by(user=current_user, id=id).first()
     if todo:
         return render_template('todo/todo.html', todo=todo)
-    abort(500)
+    abort(404)
 
 
 @bp.route('/todo', methods=['GET'])
