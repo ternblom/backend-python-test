@@ -24,6 +24,7 @@ class Todo(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   description = db.Column(db.Text, nullable=False)
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+  completed = db.Column(db.Boolean, default=False)
 
   def __repr__(self):
     return f"Todo('{self.description}')"

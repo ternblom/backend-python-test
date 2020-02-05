@@ -2,6 +2,11 @@
 
 {% block content %}
 <div class="col-md-6 col-md-offset-3">
+    <div style="display: none;" id="alert-todo-list" class="alert alert-success alert-dismissible fade in" role=alert>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <span class="feedback"></span>
+    </div>
+
     <h1>Todo List:</h1>
     <table class="table table-striped">
         <th>#</th><th>User</th><th>Description</th><th></th>
@@ -15,9 +20,12 @@
                     </a>
                 </td>
                 <td>
-                    <form method="post" action="{{ url_for('_todo.todo_delete', id=todo.id) }}">
-                        <button type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>
-                    </form>
+                    <button 
+                        type="button" 
+                        onclick="alayaToDo.deleteToDo(event, '{{ url_for('_todo.todo_delete', id=todo.id) }}')"
+                        class="btn btn-xs btn-danger">
+                        <span class="glyphicon glyphicon-remove glyphicon-white"></span>
+                    </button>
                 </td>
             </tr>
         {% endfor %}
@@ -32,5 +40,24 @@
             </form>
         </tr>
     </table>
+</div>
+
+<!-- modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Alert</h4>
+        </div>
+        <div class="modal-body">
+            <p>Do you really want to delete this ToDo?</p>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end;">
+            <button style="margin-right: 20px;" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button id="btn-ok" class="btn btn-danger">Delete</button>
+        </div>
+    </div>
+    </div>
 </div>
 {% endblock %}

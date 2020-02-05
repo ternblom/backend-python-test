@@ -1,4 +1,5 @@
 from flask import g, render_template, request, session, redirect, flash
+from flask_apispec import marshal_with
 from alayatodo import db
 from alayatodo.models import User, Todo, TodoSchema
 from alayatodo._todo import bp
@@ -36,11 +37,11 @@ def todos_POST():
     return redirect('/todo')
 
 
-@bp.route('/todo/<id>', methods=['POST'])
+@bp.route('/todo/<id>', methods=['DELETE'])
 def todo_delete(id):
     if not session.get('logged_in'):
-        return redirect('/login')
+        return ('To perform this action you must be logged!', 401)
     todo = Todo.query.get_or_404(id)
     db.session.delete(todo)
     db.session.commit()
-    return redirect('/todo')
+    return 'ToDo deleted!'
