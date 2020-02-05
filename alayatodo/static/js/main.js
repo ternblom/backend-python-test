@@ -23,7 +23,7 @@ var alayaToDo = (function ($, window) {
         _alert.fadeOut()
       }, 2000);
     },
-    doneHelper: function (response) {
+    doneHelper: function (response, deletedEl) {
       var _alert = $("#alert-todo-list");
       $('#myModal').modal('hide');
 
@@ -33,10 +33,16 @@ var alayaToDo = (function ($, window) {
       _alert.fadeIn()
       setTimeout(function () {
         _alert.fadeOut()
-        var url = new URLSearchParams(window.location.search);
-        var page = url.get('page') ? parseInt(url.get('page')) : 1;
-        if ($("table tbody").children().length === 1) {
-          window.location = "/todo?page=" + (page > 1 ? page - 1 : 1);
+        if ($("table form").length === 1 || (deletedEl && $("table form").length === 0)) {
+          var url = new URLSearchParams(window.location.search);
+          var page = url.get('page') ? parseInt(url.get('page')) : 1;
+          if ($("table tbody").children().length === 1) {
+            window.location = "/todo?page=" + (page > 1 ? page - 1 : 1);
+          }
+
+          if (deletedEl && $("table form").length === 0) {
+            window.location = "/todo"
+          }
         }
       }, 2000);
     },
@@ -49,7 +55,7 @@ var alayaToDo = (function ($, window) {
         .ajax(this.getRequestSettings(url, "PUT"))
         .done(function (response) {
           _btn.remove();
-          _this.doneHelper(response);
+          _this.doneHelper(response, false);
         })
         .fail(_this.errorHelper)
     },
@@ -70,7 +76,7 @@ var alayaToDo = (function ($, window) {
                   .ajax(_this.getRequestSettings(url, "DELETE"))
                   .done(function (response) {
                     _tr.remove();
-                    _this.doneHelper(response);
+                    _this.doneHelper(response, true);
                   })
                   .fail(_this.errorHelper)
               });

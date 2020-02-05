@@ -10,7 +10,7 @@ from alayatodo._todo import bp
 def todo(id):
     todo = Todo.query.filter_by(user=current_user, id=id).first()
     if todo:
-        return render_template('todo.html', todo=todo)
+        return render_template('todo/todo.html', todo=todo)
     abort(404)
 
 
@@ -19,7 +19,7 @@ def todo(id):
 def todos():
     page = request.args.get('page', 1, type=int)
     todos = Todo.query.filter_by(user=current_user).order_by(Todo.id.desc()).paginate(page=page, per_page=5)
-    return render_template('todos.html', todos=todos)
+    return render_template('todo/todos.html', todos=todos)
 
 
 @bp.route('/todo', methods=['POST'])
