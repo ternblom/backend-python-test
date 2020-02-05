@@ -22,10 +22,10 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if session.user %}
-              <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-user"></span>
+              <li><a href="{{ url_for('_auth.logout') }}"><span class="glyphicon glyphicon-user"></span>
                 {{ session.user.username }} Logout</a></li>
             {% else %}
-              <li><a href="{{ url_for('login') }}">Login</a></li>
+              <li><a href="{{ url_for('_auth.login') }}">Login</a></li>
             {% endif %}
           </ul>
         </div>
