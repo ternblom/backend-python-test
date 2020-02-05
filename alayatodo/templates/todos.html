@@ -9,52 +9,80 @@
 
     <h1>Todo List:</h1>
     <table class="table table-striped">
-        <th>#</th><th>User</th><th>Description</th><th></th>
-        {% for todo in todos %}
+        <thead>
+            <th>#</th>
+            <th>User</th>
+            <th>Description</th>
+            <th></th>
+        </thead>
+        <tbody>
+            {% for todo in todos.items %}
+                <tr>
+                    <td>{{ todo.id }}</td>
+                    <td>{{ todo.user_id }}</td>
+                    <td>
+                        <a href="{{ url_for('_todo.todo', id=todo.id) }}">
+                        {{ todo.description }}
+                        </a>
+                    </td>
+                    <td style="display: flex;">
+                        <button 
+                            type="button" 
+                            onclick="alayaToDo.deleteToDo(event, '{{ url_for('_todo.todo_delete', id=todo.id) }}')"
+                            class="btn btn-xs btn-danger">
+                            <span class="glyphicon glyphicon-remove glyphicon-white"></span>
+                        </button>
+
+                        {% if todo.completed == False %}
+                        <button 
+                            style="margin-left: 10px;"
+                            type="button" 
+                            onclick="alayaToDo.completeToDo(event, '{{ url_for('_todo.todo_complete', id=todo.id) }}')"
+                            class="btn btn-xs btn-success">
+                            <span class="glyphicon glyphicon-check glyphicon-white"></span>
+                        </button>
+                        {% endif %}
+
+                        <button 
+                            style="margin-left: 10px;"
+                            type="button" 
+                            onclick="alayaToDo.showJSON(event, '{{ url_for('_todo.todo_json', id=todo.id) }}')"
+                            class="btn btn-xs btn-info">JSON</button>
+                    </td>
+                </tr>
+            {% endfor %}
             <tr>
-                <td>{{ todo.id }}</td>
-                <td>{{ todo.user_id }}</td>
-                <td>
-                    <a href="{{ url_for('_todo.todo', id=todo.id) }}">
-                       {{ todo.description }}
-                    </a>
-                </td>
-                <td style="display: flex;">
-                    <button 
-                        type="button" 
-                        onclick="alayaToDo.deleteToDo(event, '{{ url_for('_todo.todo_delete', id=todo.id) }}')"
-                        class="btn btn-xs btn-danger">
-                        <span class="glyphicon glyphicon-remove glyphicon-white"></span>
-                    </button>
-
-                    {% if todo.completed == False %}
-                    <button 
-                        style="margin-left: 10px;"
-                        type="button" 
-                        onclick="alayaToDo.completeToDo(event, '{{ url_for('_todo.todo_complete', id=todo.id) }}')"
-                        class="btn btn-xs btn-success">
-                        <span class="glyphicon glyphicon-check glyphicon-white"></span>
-                    </button>
-                    {% endif %}
-
-                    <button 
-                        style="margin-left: 10px;"
-                        type="button" 
-                        onclick="alayaToDo.showJSON(event, '{{ url_for('_todo.todo_json', id=todo.id) }}')"
-                        class="btn btn-xs btn-info">JSON</button>
-                </td>
+                <form method="post" action="{{ url_for('_todo.todos_POST') }}">
+                    <td colspan="3">
+                        <input type="textbox" name="description" class="form-control small-6 small-center" placeholder="Description...">
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-sm btn-primary">Add</button>
+                    </td>
+                </form>
             </tr>
-        {% endfor %}
-        <tr>
-            <form method="post" action="{{ url_for('_todo.todos_POST') }}">
-                <td colspan="3">
-                    <input type="textbox" name="description" class="form-control small-6 small-center" placeholder="Description...">
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-sm btn-primary">Add</button>
-                </td>
-            </form>
-        </tr>
+        </tbody>
+        {% if todos.has_next or todos.has_prev %}
+        <tfoot>
+            <tr colspan="4">
+                <nav aria-label="navigation">
+                    <ul class="pagination pull-right">
+                        {% for page_num in todos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                            {% if page_num %}
+                                {% if todos.page == page_num %}
+                                    <li class="active"><a href="{{ url_for('_todo.todos', page=page_num) }}">{{ page_num }}</a></li>
+                                {% else %}
+                                    <li><a href="{{ url_for('_todo.todos', page=page_num) }}">{{ page_num }}</a></li>
+                                {% endif %}
+                            {% else %}
+                                <li><a href="#">...<span class="sr-only">(current)</span></a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </tr>
+        </tfoot>
+        {% endif %}
     </table>
 </div>
 
