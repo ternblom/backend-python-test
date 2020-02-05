@@ -45,4 +45,4 @@ class UserSchema(ma.ModelSchema):
 class TodoSchema(ma.ModelSchema):
   class Meta:
       model = User
-      fields = ('id', 'description', 'user_id')
+      fields = ('id', 'description', 'completed', 'user_id')

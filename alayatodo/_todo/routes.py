@@ -1,5 +1,4 @@
 from flask import g, render_template, request, session, redirect, flash
-from flask_apispec import marshal_with
 from alayatodo import db
 from alayatodo.models import User, Todo, TodoSchema
 from alayatodo._todo import bp
@@ -58,3 +57,14 @@ def todo_complete(id):
         db.session.commit()
         return 'ToDo Ready!'
     return ('Oops, ToDo not found!', 404)
+
+@bp.route('/todo/<id>/json', methods=['GET'])
+def todo_json(id):
+    if not session.get('logged_in'):
+        return ('To perform this action you must be logged!', 401)
+    todo = Todo.query.get(id)
+    if todo:
+        todo_schema = TodoSchema()
+        return todo_schema.dump(todo)
+    return ('Oops, ToDo not found!', 404)
+    

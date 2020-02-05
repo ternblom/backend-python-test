@@ -67,6 +67,32 @@ var alayaToDo = (function ($, window) {
           })
           .on('hidden.bs.modal', function (e) {
           });
+    },
+    showJSON: function (event, url) {
+      var _modal = $('#jsonModal');
+      var _this = this;
+
+      $
+        .ajax(_this.getRequestSettings(url, "GET"))
+        .done(function (response) {
+          _modal.find(".modal-body #pretty").append("<pre>" + JSON.stringify(response, null, 2) + "</pre>")
+          _modal.find(".modal-body #raw").append(JSON.stringify(response))
+
+          _modal.modal('show');
+          _modal
+            .on('shown.bs.modal', function (e) {
+              $('#btn-ok')
+                .off('click')
+                .on('click', function (e) {
+                  _modal.modal('hide');
+                });
+            })
+            .on('hidden.bs.modal', function (e) {
+              _modal.find(".modal-body #pretty").empty()
+              _modal.find(".modal-body #raw").empty()
+            });
+        })
+        .fail(_this.errorHelper)
     }
   }
 })(jQuery, window);
