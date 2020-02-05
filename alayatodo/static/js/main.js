@@ -12,7 +12,12 @@ var alayaToDo = (function ($, window) {
 
       _alert.removeClass("alert-success");
       _alert.addClass("alert-danger");
-      _alert.find("span.feedback").text(error);
+      if (error.status === 200) {
+        _alert.find("span.feedback").text(error);
+      }
+      else {
+        _alert.find("span.feedback").text($(error.responseText).text());
+      }
       _alert.fadeIn()
       setTimeout(function () {
         _alert.fadeOut()
@@ -104,4 +109,13 @@ $( document ).ready(function() {
       _alert.fadeOut();
     }, 2000)
   }
+
+  $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+          var csrf_token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
+          xhr.setRequestHeader("X-CSRFToken", csrf_token);
+        }
+    }
+  });
 });
