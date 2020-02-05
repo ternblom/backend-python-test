@@ -1,0 +1,18 @@
+{% extends 'todo/base.html' %}
+
+{% block ttitle %}Todo List:{% endblock %}
+
+{% block tbody %}
+  {% for todo in todos.items %}
+    {% include 'todo/todo_options.html' %}
+  {% endfor %}
+{% endblock %}
+
+{% block tform %}
+  {% include 'todo/form.html' %}
+{% endblock %}
+
+{% block tpagination %}
+  {% include 'todo/pagination.html' %}
+{% endblock %}
+

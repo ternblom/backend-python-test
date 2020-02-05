@@ -1,0 +1,12 @@
+<tr>
+  <td colspan="4">
+    <form method="post" action="{{ url_for('_todo.todos_POST') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+      <div style="display: flex;">
+          <input type="textbox" name="description" class="form-control small-6 small-center" placeholder="Description...">
+          <button type="submit" class="btn btn-sm btn-primary">Add</button>
+      </div>
+    </form>
+  </td>
+</tr>

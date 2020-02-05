@@ -1,0 +1,21 @@
+{% if todos.has_next or todos.has_prev %}
+<tfoot>
+  <tr colspan="4">
+    <nav aria-label="navigation">
+      <ul class="pagination pull-right">
+        {% for page_num in todos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+          {% if page_num %}
+            {% if todos.page == page_num %}
+              <li class="active"><a href="{{ url_for('_todo.todos', page=page_num) }}">{{ page_num }}</a></li>
+            {% else %}
+              <li><a href="{{ url_for('_todo.todos', page=page_num) }}">{{ page_num }}</a></li>
+            {% endif %}
+          {% else %}
+            <li><a href="#">...<span class="sr-only">(current)</span></a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </nav>
+  </tr>
+</tfoot>
+{% endif %}

@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="col-md-6 col-md-offset-3">
+    <div style="display: none;" id="alert-todo-list" class="alert alert-success alert-dismissible fade in" role=alert>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <span class="feedback"></span>
+    </div>
+
+    <h1>{% block ttitle %}{% endblock %}</h1>
+    <table class="table table-striped">
+        <thead>
+            {% if (todos is defined and todos.total > 0) or (todo is defined) %}
+            <tr>
+                <th>#</th>
+                <th>User</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+            {% else %}
+            <tr>
+                <th colspan="4">Add your first ToDo...</th>
+            </tr>
+            {% endif %}
+        </thead>
+        <tbody>
+            {% block tbody %}{% endblock %}
+
+            {% block tform %}{% endblock %}
+        </tbody>
+        {% block tpagination %}{% endblock %}
+    </table>
+</div>
+
+<!-- modals -->
+<!-- Alert to delete -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Alert</h4>
+        </div>
+        <div class="modal-body">
+            <p>Do you really want to delete this ToDo?</p>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end;">
+            <button style="margin-right: 20px;" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button id="btn-ok" class="btn btn-danger">Delete</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+<!-- Alert to show ToDo as a JSON -->
+<div class="modal fade" id="jsonModal" tabindex="-1" role="dialog" aria-labelledby="jsonModalLabel">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="jsonModalLabel">ToDo - JSON</h4>
+        </div>
+        <div class="modal-body">
+            <div>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                  <li role="presentation" class="active"><a href="#raw" aria-controls="home" role="tab" data-toggle="tab">Raw</a></li>
+                  <li role="presentation"><a href="#pretty" aria-controls="profile" role="tab" data-toggle="tab">Pretty</a></li>
+                </ul>
+              
+                <!-- Tab panes -->
+                <div style="padding-top: 10px;" class="tab-content">
+                  <div role="tabpanel" class="tab-pane active" id="raw">
+
+                  </div>
+                  <div role="tabpanel" class="tab-pane" id="pretty">
+
+                  </div>
+                </div>
+              </div>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end;">
+            <button id="btn-ok" class="btn btn-primary" data-dismiss="modal">Ok</button>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
