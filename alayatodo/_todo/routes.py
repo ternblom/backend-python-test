@@ -1,10 +1,13 @@
 from flask import g, render_template, request, session, redirect, flash
+from flask_login import current_user, login_required
 from alayatodo import db
 from alayatodo.models import User, Todo, TodoSchema
 from alayatodo._todo import bp
+from functools import wraps
 
 
 @bp.route('/todo/<id>', methods=['GET'])
+@login_required
 def todo(id):
     todo = Todo.query.get_or_404(id)
     return render_template('todo.html', todo=todo)
@@ -12,6 +15,7 @@ def todo(id):
 
 @bp.route('/todo', methods=['GET'])
 @bp.route('/todo/', methods=['GET'])
+@login_required
 def todos():
     if not session.get('logged_in'):
         return redirect('/login')
@@ -21,12 +25,10 @@ def todos():
 
 @bp.route('/todo', methods=['POST'])
 @bp.route('/todo/', methods=['POST'])
+@login_required
 def todos_POST():
-    if not session.get('logged_in'):
-        return redirect('/login')
     try:
-        user = User.query.get_or_404(session['user']['id'])
-        todo = Todo(description=request.form.get('description'), user=user)
+        todo = Todo(description=request.form.get('description'), user=current_user)
         db.session.add(todo)
         db.session.commit()
         flash('Your todo has been created!', 'success')
@@ -38,8 +40,8 @@ def todos_POST():
 
 @bp.route('/todo/<id>', methods=['DELETE'])
 def todo_delete(id):
-    if not session.get('logged_in'):
-        return ('To perform this action you must be logged!', 401)
+    if not current_user.is_authenticated:
+        return ('To perform this action you must be logged in!', 401)
     todo = Todo.query.get(id)
     if todo:
         db.session.delete(todo)
@@ -49,8 +51,8 @@ def todo_delete(id):
 
 @bp.route('/todo/<id>/complete', methods=['PUT'])
 def todo_complete(id):
-    if not session.get('logged_in'):
-        return ('To perform this action you must be logged!', 401)
+    if not current_user.is_authenticated:
+        return ('To perform this action you must be logged in!', 401)
     todo = Todo.query.get(id)
     if todo:
         todo.completed = True
@@ -60,8 +62,8 @@ def todo_complete(id):
 
 @bp.route('/todo/<id>/json', methods=['GET'])
 def todo_json(id):
-    if not session.get('logged_in'):
-        return ('To perform this action you must be logged!', 401)
+    if not current_user.is_authenticated:
+        return ('To perform this action you must be logged in!', 401)
     todo = Todo.query.get(id)
     if todo:
         todo_schema = TodoSchema()
