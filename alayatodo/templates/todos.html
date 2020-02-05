@@ -10,10 +10,18 @@
     <h1>Todo List:</h1>
     <table class="table table-striped">
         <thead>
-            <th>#</th>
-            <th>User</th>
-            <th>Description</th>
-            <th></th>
+            {% if (todos is defined and todos.total > 0) or (todo is defined) %}
+            <tr>
+                <th>#</th>
+                <th>User</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+            {% else %}
+            <tr>
+                <th colspan="4">Add your first ToDo...</th>
+            </tr>
+            {% endif %}
         </thead>
         <tbody>
             {% for todo in todos.items %}

@@ -33,6 +33,11 @@ var alayaToDo = (function ($, window) {
       _alert.fadeIn()
       setTimeout(function () {
         _alert.fadeOut()
+        var url = new URLSearchParams(window.location.search);
+        var page = url.get('page') ? parseInt(url.get('page')) : 1;
+        if ($("table tbody").children().length === 1) {
+          window.location = "/todo?page=" + (page > 1 ? page - 1 : 1);
+        }
       }, 2000);
     },
     completeToDo: function (event, url) {
