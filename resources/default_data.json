@@ -1,0 +1,49 @@
+{
+  "users": [
+    {
+      "username": "user1",
+      "password": "user1",
+      "todos": [
+        {
+          "description": "Ad laborum ea culpa cupidatat commodo do."
+        },
+        {
+          "description": "Consectetur dolore proident aliqua qui minim."
+        },
+        {
+          "description": "Lorem dolore consequat dolore officia."
+        },
+        {
+          "description": "Enim ut occaecat non enim id cillum mollit dolor tempor exercitation."
+        },
+        {
+          "description": "Duis do exercitation ad incididunt eu ea eiusmod ut ea."
+        },
+        {
+          "description": "Mollit cupidatat sint qui veniam reprehenderit sint non excepteur. "
+        }
+      ]
+    },
+    {
+      "username": "user2",
+      "password": "user2",
+      "todos": [
+        {
+          "description": "Velit in eiusmod elit anim. Ut ad labore occaecat proident nostrud adipisicing ut."
+        },
+        {
+          "description": "Qui velit irure nostrud elit aute aliqua."
+        },
+        {
+          "description": "Pariatur ullamco dolor dolor officia consequat ex veniam duis incididunt."
+        },
+        {
+          "description": "Ullamco ipsum laboris ad dolore sit qui ad enim consectetur consequat enim consectetur cupidatat amet."
+        },
+        {
+          "description": "Quis fugiat consectetur eiusmod ullamco et anim sint eu."
+        }
+      ]
+    }
+  ]
+}

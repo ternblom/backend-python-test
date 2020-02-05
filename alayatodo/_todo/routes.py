@@ -1,4 +1,4 @@
-from flask import g, render_template, request, session, redirect
+from flask import g, render_template, request, session, redirect, flash
 from alayatodo import db
 from alayatodo.models import User, Todo, TodoSchema
 from alayatodo._todo import bp
@@ -24,11 +24,15 @@ def todos():
 def todos_POST():
     if not session.get('logged_in'):
         return redirect('/login')
-    user = User.query.get_or_404(session['user']['id'])
-    todo = Todo(description=request.form.get('description', ''), user=user)
-    db.session.add(todo)
-    db.session.commit()
-
+    try:
+        user = User.query.get_or_404(session['user']['id'])
+        todo = Todo(description=request.form.get('description'), user=user)
+        db.session.add(todo)
+        db.session.commit()
+        flash('Your todo has been created!', 'success')
+    except AssertionError as err:
+        flash(err.args[0], 'danger')
+        db.session.rollback()
     return redirect('/todo')
 
 

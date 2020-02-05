@@ -8,26 +8,18 @@ from docopt import docopt
 import subprocess
 import os
 
+from flask_migrate import upgrade
 from alayatodo import app
-
-
-def _run_sql(filename):
-    try:
-        subprocess.check_output(
-            "sqlite3 %s < %s" % (app.config['DATABASE'], filename),
-            stderr=subprocess.STDOUT,
-            shell=True
-        )
-    except subprocess.CalledProcessError as ex:
-        print(ex.output)
-        os.exit(1)
+from alayatodo.helpers import db_seed
 
 
 if __name__ == '__main__':
     args = docopt(__doc__)
     if args['initdb']:
-        _run_sql('resources/database.sql')
-        _run_sql('resources/fixtures.sql')
-        print("AlayaTodo: Database initialized.")
+        with app.app_context():
+            upgrade()
+            print("AlayaTodo: Database initialized.")
+            db_seed()
+            print("AlayaTodo: Database seed data ready.")
     else:
         app.run(use_reloader=True)

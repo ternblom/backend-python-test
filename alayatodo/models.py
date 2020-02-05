@@ -1,4 +1,5 @@
-from alayatodo import db, ma
+from alayatodo import db, ma, bcrypt
+from sqlalchemy.orm import validates
 
 
 class User(db.Model):
@@ -26,6 +27,12 @@ class Todo(db.Model):
 
   def __repr__(self):
     return f"Todo('{self.description}')"
+
+  @validates('description')
+  def validate_description(self, key, value):
+    assert not value.isspace(), 'Description can not be only white space.'
+    assert value != "", 'Description can not be empty.'
+    return value
 
 
 class UserSchema(ma.ModelSchema):
