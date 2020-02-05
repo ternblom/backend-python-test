@@ -8,6 +8,7 @@
     </div>
 
     <h1>{% block ttitle %}{% endblock %}</h1>
+    {% block tpagination %}{% endblock %}
     <table class="table table-striped">
         <thead>
             {% if (todos is defined and todos.total > 0) or (todo is defined) %}
@@ -28,7 +29,6 @@
 
             {% block tform %}{% endblock %}
         </tbody>
-        {% block tpagination %}{% endblock %}
     </table>
 </div>
 

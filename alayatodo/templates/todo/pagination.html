@@ -1,14 +1,26 @@
-{% if todos.has_next or todos.has_prev %}
-<tfoot>
-  <tr colspan="4">
+<div style="display: flex; justify-content: flex-end;">
+  <div>
+    <select style="width: 50px;" class="form-control" onchange="alayaToDo.reloadPage(event)">
+      {% for n in per_page_list %}
+        {% if per_page == n %}
+        <option value="{{n}}" selected>{{n}}</option>
+        {% else %}
+        <option value="{{n}}">{{n}}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+  </div>
+
+  {% if todos.has_next or todos.has_prev %}
+  <div style="margin-left: 20px;">
     <nav aria-label="navigation">
-      <ul class="pagination pull-right">
+      <ul style="margin: 0" class="pagination">
         {% for page_num in todos.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
           {% if page_num %}
             {% if todos.page == page_num %}
-              <li class="active"><a href="{{ url_for('_todo.todos', page=page_num) }}">{{ page_num }}</a></li>
+              <li class="active"><a href="{{ url_for('_todo.todos', page=page_num, per_page=per_page ) }}">{{ page_num }}</a></li>
             {% else %}
-              <li><a href="{{ url_for('_todo.todos', page=page_num) }}">{{ page_num }}</a></li>
+              <li><a href="{{ url_for('_todo.todos', page=page_num, per_page=per_page ) }}">{{ page_num }}</a></li>
             {% endif %}
           {% else %}
             <li><a href="#">...<span class="sr-only">(current)</span></a></li>
@@ -16,6 +28,6 @@
         {% endfor %}
       </ul>
     </nav>
-  </tr>
-</tfoot>
-{% endif %}
+  </div>
+  {% endif %}
+</div>

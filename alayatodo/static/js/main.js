@@ -109,6 +109,11 @@ var alayaToDo = (function ($, window) {
             });
         })
         .fail(_this.errorHelper)
+    },
+    reloadPage: function (event) {
+      var value = $("select option:selected").text()
+      var page = 1;
+      window.location = "/todo?page=" + page + "&per_page=" + value
     }
   }
 })(jQuery, window);

@@ -1,4 +1,4 @@
-from flask import render_template, request, session, redirect, flash, abort, url_for
+from flask import render_template, request, session, redirect, flash, abort, url_for, current_app as app
 from flask_login import current_user, login_required
 from alayatodo import db
 from alayatodo.models import User, Todo, TodoSchema
@@ -18,8 +18,9 @@ def todo(id):
 @login_required
 def todos():
     page = request.args.get('page', 1, type=int)
-    todos = Todo.query.filter_by(user=current_user).order_by(Todo.id.desc()).paginate(page=page, per_page=5)
-    return render_template('todo/todos.html', todos=todos)
+    per_page = request.args.get('per_page', app.config['TODOS_PER_PAGE'], type=int)
+    todos = Todo.query.filter_by(user=current_user).order_by(Todo.id.desc()).paginate(page=page, per_page=per_page)
+    return render_template('todo/todos.html', todos=todos, per_page=per_page, per_page_list=app.config['TODOS_PER_PAGE_LIST'])
 
 
 @bp.route('/todo', methods=['POST'])
