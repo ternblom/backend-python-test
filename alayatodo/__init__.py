@@ -35,6 +35,9 @@ app.register_blueprint(_auth_bp)
 from alayatodo._todo import bp as _todo_bp
 app.register_blueprint(_todo_bp)
 
+from alayatodo._errors import bp as _errors_bp
+app.register_blueprint(_errors_bp)
+
 from alayatodo._main import bp as _main_bp
 app.register_blueprint(_main_bp)
 
