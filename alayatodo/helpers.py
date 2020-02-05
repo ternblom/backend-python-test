@@ -10,5 +10,5 @@ def db_seed():
       user = User(username=u['username'],password=u['password'])
       db.session.add(user)
       for t in u['todos']:
-        db.session.add(Todo(description=t['description'], user=user))
+        db.session.add(Todo(description=t['description'], completed=False, user=user))
     db.session.commit()

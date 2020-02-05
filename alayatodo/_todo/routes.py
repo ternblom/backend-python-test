@@ -41,7 +41,20 @@ def todos_POST():
 def todo_delete(id):
     if not session.get('logged_in'):
         return ('To perform this action you must be logged!', 401)
-    todo = Todo.query.get_or_404(id)
-    db.session.delete(todo)
-    db.session.commit()
-    return 'ToDo deleted!'
+    todo = Todo.query.get(id)
+    if todo:
+        db.session.delete(todo)
+        db.session.commit()
+        return 'ToDo deleted!'
+    return ('Oops, ToDo not found!', 404)
+
+@bp.route('/todo/<id>/complete', methods=['PUT'])
+def todo_complete(id):
+    if not session.get('logged_in'):
+        return ('To perform this action you must be logged!', 401)
+    todo = Todo.query.get(id)
+    if todo:
+        todo.completed = True
+        db.session.commit()
+        return 'ToDo Ready!'
+    return ('Oops, ToDo not found!', 404)

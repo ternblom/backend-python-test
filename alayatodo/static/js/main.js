@@ -30,11 +30,26 @@ var alayaToDo = (function ($, window) {
         _alert.fadeOut()
       }, 2000);
     },
+    completeToDo: function (event, url) {
+      var _this = this;
+      var _btn = $(event.target).is('span') 
+        ? $(event.target).parent()
+        : $(event.target);
+      $
+        .ajax(this.getRequestSettings(url, "PUT"))
+        .done(function (response) {
+          _btn.remove();
+          _this.doneHelper(response);
+        })
+        .fail(_this.errorHelper)
+    },
     deleteToDo: function (event, url) {
       var _modal = $('#myModal');
       var _this = this;
-      var _tr = $(event.target).parent().parent().parent();
-      
+      var _tr = $(event.target).is('button') 
+        ? $(event.target).parent().parent() 
+        : $(event.target).parent().parent().parent();
+
       _modal.modal('show');
         _modal
           .on('shown.bs.modal', function (e) {
