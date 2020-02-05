@@ -1,5 +1,6 @@
-from alayatodo._auth import bp
 from flask import g, render_template, request, session, redirect
+from alayatodo.models import User, UserSchema
+from alayatodo._auth import bp
 
 
 @bp.route('/login', methods=['GET'])
@@ -10,12 +11,11 @@ def login():
 def login_POST():
     username = request.form.get('username')
     password = request.form.get('password')
+    user = User.query.filter_by(username=username, password=password).first_or_404()
 
-    sql = "SELECT * FROM users WHERE username = '%s' AND password = '%s'";
-    cur = g.db.execute(sql % (username, password))
-    user = cur.fetchone()
     if user:
-        session['user'] = dict(user)
+        user_schema = UserSchema()
+        session['user'] = dict(user_schema.dump(user))
         session['logged_in'] = True
         return redirect('/todo')
 
