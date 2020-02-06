@@ -1,7 +1,8 @@
-from flask import render_template, request, session, redirect, flash, abort, url_for, current_app as app, make_response
+from flask import render_template, request, redirect, flash, abort, url_for, current_app as app, make_response
 from flask_login import current_user, login_required
 from alayatodo import db
 from alayatodo.models import User, Todo, TodoSchema
+from alayatodo.helpers import get_pagination_info
 from alayatodo._todo import bp
 
 
@@ -17,18 +18,7 @@ def todo(id):
 @bp.route('/todo', methods=['GET'])
 @login_required
 def todos():
-    page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', app.config['TODOS_PER_PAGE'], type=int)
-    todo_filter_by = request.args.get('todo_filter_by', 'all')
-
-    if not request.args.get('per_page') and not request.args.get('per_page'):
-        if request.cookies.get('TODOS_ACTIVE_PAGE'):
-            page = int(request.cookies.get('TODOS_ACTIVE_PAGE'))
-            per_page = int(request.cookies.get('TODOS_PER_PAGE'))
-
-    if not request.args.get('todo_filter_by'):
-        if request.cookies.get('TODOS_FILTER_BY'):
-            todo_filter_by = request.cookies.get('TODOS_FILTER_BY')
+    page, per_page, todo_filter_by = get_pagination_info()
 
     filters = {'user':current_user, 'completed': True} if todo_filter_by == 'completed' else {'user':current_user}
     todos = Todo.query.filter_by(**filters).order_by(Todo.completed.asc(), Todo.id.desc()).paginate(page=page, per_page=per_page, error_out=False)

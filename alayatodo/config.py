@@ -5,6 +5,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TODOS_PER_PAGE = 3
     TODOS_PER_PAGE_LIST = [1, 3, 6, 9, 12, 15]
+    TODOS_DEFAULT_FILTER = 'all'
     DEBUG = True
     SECRET_KEY = 'd93a3aa0f654cd43048d418367189bc6'
     USERNAME = 'admin'
