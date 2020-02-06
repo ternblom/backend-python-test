@@ -36,6 +36,15 @@ bin/python main.py initdb
 bin/python main.py
 ```
 
+### Testing
+**First complete installation step**
+```sh
+coverage run --source alayatodo -m unittest
+coverage report -m
+coverage html
+```
+Open htmlcov/index.html for more details
+
 ### Instructions
 
 You will be asked to improve the code of this app with the following tasks.
