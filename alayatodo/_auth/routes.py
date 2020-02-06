@@ -19,6 +19,7 @@ def login_POST():
     if user and user.check_password(password):
       login_user(user)
       next_page = request.args.get('next')
+      print(next_page)
       flash('You have been logged in!', 'success')
       return redirect(next_page) if next_page else redirect(url_for('_todo.todos'))
     else:
