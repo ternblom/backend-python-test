@@ -39,9 +39,9 @@ bin/python main.py
 ### Testing
 **First complete installation step**
 ```sh
-coverage run --source alayatodo -m unittest
-coverage report -m
-coverage html
+bin/coverage run --source alayatodo -m unittest
+bin/coverage report -m
+bin/coverage html
 ```
 Open htmlcov/index.html for more details
 
