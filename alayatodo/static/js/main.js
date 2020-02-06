@@ -1,9 +1,10 @@
 var alayaToDo = (function ($, window) {
   return {
-    getRequestSettings: function (url, method) {
+    getRequestSettings: function (url, method, data) {
       return {
-        "url": url,
-        "method": method
+        url: url,
+        method: method,
+        data: data ? data : {}
       }
     },
     errorHelper: function (error) {
@@ -46,15 +47,22 @@ var alayaToDo = (function ($, window) {
         }
       }, 2000);
     },
-    completeToDo: function (event, url) {
+    completeToDo: function (event, url, value) {
       var _this = this;
       var _btn = $(event.target).is('span') 
         ? $(event.target).parent()
         : $(event.target);
       $
-        .ajax(this.getRequestSettings(url, "PUT"))
+        .ajax(this.getRequestSettings(url, "PUT", { complete: value }))
         .done(function (response) {
-          _btn.remove();
+          if (_btn.hasClass('btn-check')) {
+            _btn.hide();
+            _btn.siblings('.btn-uncheck').show();
+          }
+          else {
+            _btn.hide();
+            _btn.siblings('.btn-check').show();
+          }
           _this.doneHelper(response, false);
         })
         .fail(_this.errorHelper)

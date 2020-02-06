@@ -1,32 +1,45 @@
 <tr>
-  <td>{{ todo.id }}</td>
+  {% if todos is defined %}
+  <td>
+    {{ (todos.items.index(todo) + 1) + ((page - 1) * per_page) }}
+  </td>
+  {% endif %}
   <td>
     <a href="{{ url_for('_todo.todo', id=todo.id) }}">
     {{ todo.description }}
     </a>
   </td>
-  <td style="display: flex;">
-    <button 
-      type="button" 
-      onclick="alayaToDo.deleteToDo(event, '{{ url_for('_todo.todo_delete', id=todo.id) }}')"
-      class="btn btn-xs btn-danger">
-      <span class="glyphicon glyphicon-remove glyphicon-white"></span>
-    </button>
+  <td>
+    <div style="display: flex;">
+      <button 
+        type="button" 
+        name="btn-delete"
+        onclick="alayaToDo.deleteToDo(event, '{{ url_for('_todo.todo_delete', id=todo.id) }}')"
+        class="btn-delete btn btn-xs btn-danger">
+        <span class="glyphicon glyphicon-remove glyphicon-white"></span>
+      </button>
 
-    {% if todo.completed == False %}
-    <button 
-      style="margin-left: 10px;"
-      type="button" 
-      onclick="alayaToDo.completeToDo(event, '{{ url_for('_todo.todo_complete', id=todo.id) }}')"
-      class="btn btn-xs btn-success">
-      <span class="glyphicon glyphicon-check glyphicon-white"></span>
-    </button>
-    {% endif %}
+      <button 
+        style="margin-left: 10px; {% if todo.completed %}display: none;{% endif %}"
+        type="button" 
+        onclick="alayaToDo.completeToDo(event, '{{ url_for('_todo.todo_complete', id=todo.id) }}', 1)"
+        class="btn btn-xs btn-success btn-uncheck">
+        <span class="glyphicon glyphicon-unchecked glyphicon-white"></span>
+      </button>
 
-    <button 
-      style="margin-left: 10px;"
-      type="button" 
-      onclick="alayaToDo.showJSON(event, '{{ url_for('_todo.todo_json', id=todo.id) }}')"
-      class="btn btn-xs btn-info">JSON</button>
+      <button 
+        style="margin-left: 10px; {% if todo.completed == False %}display: none;{% endif %}"
+        type="button" 
+        onclick="alayaToDo.completeToDo(event, '{{ url_for('_todo.todo_complete', id=todo.id) }}', 0)"
+        class="btn btn-xs btn-danger btn-check">
+        <span class="glyphicon glyphicon-check glyphicon-white"></span>
+      </button>
+
+      <button 
+        style="margin-left: 10px;"
+        type="button" 
+        onclick="alayaToDo.showJSON(event, '{{ url_for('_todo.todo_json', id=todo.id) }}')"
+        class="btn btn-xs btn-info">JSON</button>
+    </div>
   </td>
 </tr>

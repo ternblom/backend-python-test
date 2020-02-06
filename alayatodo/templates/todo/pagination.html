@@ -1,5 +1,19 @@
 <div style="display: flex; justify-content: flex-end;">
   <div>
+    <form method="get" action="{{ url_for('_todo.todos', page=page_num, per_page=per_page ) }}">
+      <div class="btn-group" role="group" aria-label="...">
+        {% if todo_filter_by == 'completed' %}
+        <button type="button" name="todo_filter_by" value="completed" class="btn btn-primary">Completed</button>
+        <button type="submit" name="todo_filter_by" value="all" class="btn btn-default">All</button>
+        {% else %}
+        <button type="submit" name="todo_filter_by" value="completed" class="btn btn-default">Completed</button>
+        <button type="button" name="todo_filter_by" value="all" class="btn btn-primary">All</button>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+
+  <div style="margin-left: 20px;">
     <select style="width: 50px;" class="form-control" onchange="alayaToDo.reloadPage(event)">
       {% for n in per_page_list %}
         {% if per_page == n %}

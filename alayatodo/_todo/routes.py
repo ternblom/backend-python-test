@@ -1,4 +1,4 @@
-from flask import render_template, request, session, redirect, flash, abort, url_for, current_app as app
+from flask import render_template, request, session, redirect, flash, abort, url_for, current_app as app, make_response
 from flask_login import current_user, login_required
 from alayatodo import db
 from alayatodo.models import User, Todo, TodoSchema
@@ -19,8 +19,33 @@ def todo(id):
 def todos():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', app.config['TODOS_PER_PAGE'], type=int)
-    todos = Todo.query.filter_by(user=current_user).order_by(Todo.id.desc()).paginate(page=page, per_page=per_page)
-    return render_template('todo/todos.html', todos=todos, per_page=per_page, per_page_list=app.config['TODOS_PER_PAGE_LIST'])
+    todo_filter_by = request.args.get('todo_filter_by', 'all')
+
+    if not request.args.get('per_page') and not request.args.get('per_page'):
+        if request.cookies.get('TODOS_ACTIVE_PAGE'):
+            page = int(request.cookies.get('TODOS_ACTIVE_PAGE'))
+            per_page = int(request.cookies.get('TODOS_PER_PAGE'))
+
+    if not request.args.get('todo_filter_by'):
+        if request.cookies.get('TODOS_FILTER_BY'):
+            todo_filter_by = request.cookies.get('TODOS_FILTER_BY')
+
+    filters = {'user':current_user, 'completed': True} if todo_filter_by == 'completed' else {'user':current_user}
+    todos = Todo.query.filter_by(**filters).order_by(Todo.completed.asc(), Todo.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
+
+    resp = make_response(render_template(
+        'todo/todos.html', 
+        todos=todos, 
+        page=page, 
+        per_page=per_page, 
+        per_page_list=app.config['TODOS_PER_PAGE_LIST'],
+        todo_filter_by=todo_filter_by
+    ))
+    resp.set_cookie('TODOS_PER_PAGE', str(per_page))
+    resp.set_cookie('TODOS_ACTIVE_PAGE', str(page))
+    resp.set_cookie('TODOS_FILTER_BY', str(todo_filter_by))
+    return resp
+    
 
 
 @bp.route('/todo', methods=['POST'])
@@ -55,7 +80,7 @@ def todo_complete(id):
         return ('To perform this action you must be logged in!', 401)
     todo = Todo.query.filter_by(user=current_user, id=id).first()
     if todo:
-        todo.completed = True
+        todo.completed = request.form.get('complete') == "1"
         db.session.commit()
         return 'ToDo Ready!'
     return ('Oops, ToDo not found!', 404)

@@ -2,9 +2,11 @@
 
 {% block content %}
 <div class="col-md-6 col-md-offset-3">
-    <div style="display: none;" id="alert-todo-list" class="alert alert-success alert-dismissible fade in" role=alert>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <span class="feedback"></span>
+    <div style="height: 52px;">
+        <div style="display: none;" id="alert-todo-list" class="alert alert-success alert-dismissible fade in" role=alert>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="feedback"></span>
+        </div>
     </div>
 
     <h1>{% block ttitle %}{% endblock %}</h1>
@@ -13,9 +15,11 @@
         <thead>
             {% if (todos is defined and todos.total > 0) or (todo is defined) %}
             <tr>
+                {% if todos is defined %}
                 <th>#</th>
+                {% endif %}
                 <th>Description</th>
-                <th></th>
+                <th style="width: 30px;"></th>
             </tr>
             {% else %}
             <tr>
@@ -29,6 +33,16 @@
             {% block tform %}{% endblock %}
         </tbody>
     </table>
+
+    <div>
+        <legend>
+            Good to know...
+        </legend>
+        <h6><span class="label label-danger"> <i class="glyphicon glyphicon-remove glyphicon-white"></i></span> Delete ToDo</h6>
+        <h6><span class="label label-success"> <i class="glyphicon glyphicon-unchecked glyphicon-white"></i></span> Mark ToDo (completed)</h6>
+        <h6><span class="label label-danger"> <i class="glyphicon glyphicon-check glyphicon-white"></i></span> Unmark ToDo (not completed)</h6>
+        <h6><span class="label label-info">JSON</span> Show ToDo details</h6>
+    </div>
 </div>
 
 <!-- modals -->
